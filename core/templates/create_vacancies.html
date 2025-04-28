@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Vacancies</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+    .form-header {
+      padding: 50px 0;
+      text-align: center;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      border-radius: 0 0 30px 30px;
+      margin-bottom: 40px;
+    }
+    .form-card {
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      padding: 40px;
+    }
+    .form-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    .form-label, .form-control {
+      color: #333;
+    }
+    .form-control {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+    }
+    .form-control:focus {
+      background-color: #ffffff;
+      border-color: #6a11cb;
+    }
+    .form-select {
+      background-color: #f9f9f9;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+    .form-select:focus {
+      background-color: #ffffff;
+      border-color: #6a11cb;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      border-color: #2575fc;
+    }
+    .btn-outline-primary {
+      color: #2575fc;
+      border-color: #2575fc;
+    }
+    .btn-outline-primary:hover {
+      background-color: #2575fc;
+      color: white;
+    }
+    .form-section {
+      margin-top: 40px;
+    }
+    .floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 65px;
+      height: 65px;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 999;
+      text-decoration: none;
+    }
+    .floating-btn:hover {
+      transform: scale(1.1) rotate(10deg);
+      background: linear-gradient(to right, #2575fc, #6a11cb);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Form Header -->
+<div class="form-header">
+  <h1>Create a New Vacancy</h1>
+  <p>Fill in the details below to create a new job posting</p>
+</div>
+
+<div class="container">
+  <div class="form-card">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="company_name" class="form-label">Company Name</label>
+          <input type="text" name="company_name" class="form-control" id="company_name" required>
+        </div>
+      
+        <div class="mb-3">
+          <label for="website" class="form-label">Website (optional)</label>
+          <input type="url" name="website" class="form-control" id="website">
+        </div>
+      
+        <div class="mb-3">
+          <label for="company_logo" class="form-label">Company Logo</label>
+          <input type="file" name="company_logo" class="form-control" id="company_logo">
+        </div>
+      
+        <div class="mb-3">
+          <label for="recruitment_requirements" class="form-label">Recruitment Requirements</label>
+          <textarea name="recruitment_requirements" class="form-control" id="recruitment_requirements" rows="4" required></textarea>
+        </div>
+      
+        <div class="mb-3">
+          <label for="post" class="form-label">Job Post</label>
+          <input type="text" name="post" class="form-control" id="post" required>
+        </div>
+      
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Create Vacancy</button>
+        </div>
+      </form>
+      
+  </div>
+</div>
+
+<!-- Floating Button -->
+<a href="#" class="floating-btn" title="Create New Vacancy">
+  +
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

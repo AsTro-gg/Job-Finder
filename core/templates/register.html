@@ -57,11 +57,13 @@
     .form-control {
       background-color: #333;
       border: 1px solid #444;
+      color: #fff;
     }
 
     .form-control:focus {
       background-color: #444;
       border-color: #007bff;
+      color: #fff;
     }
 
     .form-select {
@@ -73,6 +75,12 @@
     .form-select:focus {
       background-color: #444;
       border-color: #007bff;
+    }
+
+    /* Improve readability while typing */
+    .form-control::placeholder,
+    .form-select::placeholder {
+      color: #ccc;
     }
   </style>
 </head>
@@ -88,17 +96,17 @@
       {% csrf_token %}
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
-        <input type="email" name="email" class="form-control" id="exampleInputEmail1">
+        <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter your email">
       </div>
 
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password">
       </div>
 
       <div class="mb-3">
         <label for="exampleInputUsername" class="form-label">Username</label>
-        <input type="text" name="username" class="form-control" id="exampleInputUsername">
+        <input type="text" name="username" class="form-control" id="exampleInputUsername" placeholder="Enter your username">
       </div>
 
       <div class="mb-3">

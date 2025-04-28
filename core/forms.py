@@ -19,3 +19,9 @@ class JobseekerForm(forms.ModelForm):
             'resume' : forms.FileInput(attrs={'class':'form-control'}),
             'bio': forms.TextInput(attrs={'class':'form-control'})
         }
+
+class EmployerForm(forms.ModelForm):
+    class Meta:
+        model = EmployerModel
+        fields = '__all__'
+        exclude = ['user']

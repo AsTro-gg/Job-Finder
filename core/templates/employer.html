@@ -1,23 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employer Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Employer Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 100px; /* make space for the floating button */
+    }
+    .dashboard-header {
+      padding: 50px 0;
+      text-align: center;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      border-radius: 0 0 30px 30px;
+      margin-bottom: 40px;
+    }
+    .stats-card {
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .stats-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    .job-card {
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+    .job-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+    .section-title {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-align: center;
+      color: #333;
+    }
+    /* Floating Button */
+    .floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 65px;
+      height: 65px;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      z-index: 999;
+      text-decoration: none;
+    }
+    .floating-btn:hover {
+      transform: scale(1.1) rotate(10deg);
+      background: linear-gradient(to right, #2575fc, #6a11cb);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    {% for i in list %}
-    <p><strong>User:</strong> {{ i.user }}</p>
-    <p><strong>Resume field value:</strong> {{ i.resume }}</p>
-    <p><strong>Resume URL:</strong> 
-        {% if i.resume %}
-            {{ i.resume.url }}
-        {% else %}
-            (No file uploaded)
-        {% endif %}
-    </p>
-    <hr>
-{% endfor %}
-</body>
 
+<!-- Hero Section -->
+<div class="dashboard-header">
+  <h1>Welcome, Employer!</h1>
+  <p>Here's an overview of your job postings and application stats</p>
+</div>
+
+<div class="container">
+  <!-- Statistics Cards -->
+  <div class="row text-center mb-5">
+    <div class="col-md-3 mb-4">
+      <div class="p-4 stats-card">
+        <h5>Applications</h5>
+        <h2 class="text-primary">{{ applied_by }}</h2>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="p-4 stats-card">
+        <h5>Accepted</h5>
+        <h2 class="text-success">{{ accepted }}</h2>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="p-4 stats-card">
+        <h5>Rejected</h5>
+        <h2 class="text-danger">{{ rejected }}</h2>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="p-4 stats-card">
+        <h5>Pending</h5>
+        <h2 class="text-warning">{{ pending }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Job Posts Section -->
+  <h2 class="section-title">Your Job Posts</h2>
+
+  <div class="row">
+    {% for i in employer_instance %}
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="p-3 job-card h-100">
+        <h5 class="text-primary">{{ i.post }}</h5>
+        <p class="text-muted small mb-2">{{ i.created_at }}</p>
+        <p>{{ i.recruitment_requirements|truncatewords:20 }}</p>
+        <a href="{% url 'View application' pk=i.id %}" class="btn btn-outline-primary btn-sm mt-2">View Applications</a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="text-center text-muted">
+      <p>No job postings yet.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Floating Create Vacancy Button -->
+<a href="{%url 'create'%}" class="floating-btn" title="Create New Vacancy">
+  +
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
