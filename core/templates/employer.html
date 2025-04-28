@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Dashboard</title>
+</head>
+<body>
+    {% for i in list %}
+    <p><strong>User:</strong> {{ i.user }}</p>
+    <p><strong>Resume field value:</strong> {{ i.resume }}</p>
+    <p><strong>Resume URL:</strong> 
+        {% if i.resume %}
+            {{ i.resume.url }}
+        {% else %}
+            (No file uploaded)
+        {% endif %}
+    </p>
+    <hr>
+{% endfor %}
+</body>
+
+</html>
