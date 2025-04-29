@@ -44,7 +44,11 @@ def user_login(request):
 
 def jobseekerhomepage(request):
     if request.user.role == 'job_seeker':
-        data = EmployerModel.objects.all()
+        query = request.GET.get('q')
+        if query:
+            data = EmployerModel.objects.filter(company_name=query)  # or user__username etc.
+        else:
+            data = EmployerModel.objects.all().order_by('created_at')
         context = {'employerdata':data}
         return render(request,'jobseeker.html',context)
     return redirect('login')
@@ -88,19 +92,24 @@ def jobseeker_applicationpage(request, pk):
     # If the user is not authenticated, redirect to the login page
     return redirect('login')
 
+def all_applied(request):
+    if request.user.role == 'job_seeker':
+        jobseekerdata = JobSeekerModel.objects.filter(user = request.user)
+        context = {'jobseekerdata':jobseekerdata}
+        return render(request,'view_applied.html',context)
+    return redirect('login')
+
 def employer(request):
     if request.user.is_authenticated:
         if request.user.role == 'employer':
             employer_instance = EmployerModel.objects.filter(user=request.user)
-            post_count = employer_instance.count()
-            applied_count = AppliedTo.objects.filter(post__user=request.user).count()
+            applied_count = JobSeekerModel.objects.filter(job__user =request.user).count()
             accepted_count = AppliedTo.objects.filter(post__user = request.user,status = 'accepted').count()
             rejected_count = AppliedTo.objects.filter(post__user = request.user,status = 'rejected').count()
             pending_count = AppliedTo.objects.filter(post__user = request.user,status = 'pending').count()
 
             context = {
                 'employer_instance': employer_instance,
-                'post': post_count,
                 'applied_by': applied_count,
                 'accepted':accepted_count,
                 'rejected':rejected_count,
@@ -136,6 +145,13 @@ def ViewApplication(request, pk):
             return render(request, 'view_application.html', context)
         return redirect('login')
     return redirect('login')
+
+def delete_application(request,pk):
+    filter = EmployerModel.objects.get(id = pk)
+    if filter:
+        filter.delete()
+        return redirect('employer')
+
 
 def CreateVacancies(request):
     if request.method == 'POST':

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>View Application</title>
+  <title>View Applications</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
@@ -15,35 +15,40 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
     }
+
+    .container-wrapper {
+      width: 100%;
+      max-width: 900px;
+      padding: 40px 20px;
+    }
+
     .application-container {
       background: white;
       border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      padding: 40px;
-      width: 100%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      padding: 30px;
       animation: fadeIn 0.6s ease-in-out;
-      margin-bottom: 20px;  /* Space between cards */
     }
+
     @keyframes fadeIn {
       from {opacity: 0; transform: translateY(20px);}
       to {opacity: 1; transform: translateY(0);}
     }
+
     .btn-back {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 1000;
+      margin-bottom: 20px;
     }
+
     .resume-image {
       width: 100%;
       max-height: 500px;
       object-fit: contain;
       border-radius: 10px;
       margin-top: 15px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     }
+
     .file-download {
       margin-top: 15px;
       display: inline-block;
@@ -53,57 +58,58 @@
       text-decoration: none;
       color: #2575fc;
       font-weight: 500;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
     }
+
     .file-download:hover {
       background-color: #e2e6ea;
-      text-decoration: none;
       color: #1d5ed3;
       transform: scale(1.05);
     }
-    .action-buttons {
-      margin-top: 30px;
-    }
+
     .action-buttons .btn {
-      margin-right: 15px;
-      margin-top: 10px;
+      margin: 10px 10px 0 0;
       min-width: 120px;
       transition: transform 0.3s ease;
     }
+
     .action-buttons .btn:hover {
       transform: scale(1.05);
     }
-    h2, h5 {
-      color: #343a40;
-    }
-    /* Additional Styling for Spacing and Layout */
+
     .application-cards {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      gap: 20px;
     }
+
     .application-card {
-      width: 48%;  /* Adjust the width to allow space between the cards */
-      margin-bottom: 20px;
+      flex: 1 1 calc(50% - 10px);
+    }
+
+    @media (max-width: 768px) {
+      .application-card {
+        flex: 1 1 100%;
+      }
+    }
+
+    h2, h5 {
+      color: #343a40;
     }
   </style>
 </head>
 
 <body>
+  <div class="container-wrapper">
 
-<div class="container d-flex justify-content-center align-items-center">
-  <div class="w-100" style="max-width: 850px;">
-  
     <!-- Back Button -->
-    <div class="text-start mb-4">
-      <a href="{% url 'employer' %}" class="btn btn-outline-light btn-back">&larr; Back to Dashboard</a>
-    </div>
+    <a href="{% url 'employer' %}" class="btn btn-outline-light btn-back">&larr; Back to Dashboard</a>
 
-    <!-- Application Card Container -->
-    <h2 class="mb-4 text-center">{{ list.company_name }} - Job Applications</h2>
-    
-    <!-- Loop through job applications -->
+    <!-- Header -->
+    <h2 class="text-center text-white mb-4">{{ list.company_name }} - Job Applications</h2>
+
+    <!-- Applications List -->
     <div class="application-cards">
       {% for app_data in applications_with_resumes %}
         <div class="application-card">
@@ -120,7 +126,6 @@
 
             <div class="mb-3 text-start">
               <h5>Resume:</h5>
-              
               {% if app_data.application.resume %}
                 {% if app_data.resume_is_image %}
                   <img src="{{ app_data.application.resume.url }}" alt="{{ app_data.application.user }}" class="resume-image">
@@ -130,7 +135,7 @@
                   </a>
                 {% endif %}
               {% else %}
-                <p>No resume uploaded.</p>
+                <p class="text-muted">No resume uploaded.</p>
               {% endif %}
             </div>
 
@@ -139,25 +144,29 @@
               <p class="text-muted">{{ app_data.application.created_at }}</p>
             </div>
 
-            <!-- Accept / Reject Buttons -->
+            <!-- Action Buttons -->
             <div class="action-buttons d-flex flex-wrap justify-content-center">
-              <form method="post" class="me-3">
+              <form method="post">
                 {% csrf_token %}
                 <button type="submit" name="action" value="accept" class="btn btn-success">Accept</button>
                 <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
               </form>
             </div>
-
           </div>
         </div>
       {% empty %}
-        <p>No job seekers have applied for this job yet.</p>
+        <div class="application-card mx-auto">
+          <div class="application-container text-center">
+            <h5 class="text-muted mb-3">No Applications Yet</h5>
+            <p class="text-muted">Job seekers haven't applied for this job. Check back later.</p>
+            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" alt="No applications" style="width: 120px; opacity: 0.6;">
+          </div>
+        </div>
       {% endfor %}
     </div>
 
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
